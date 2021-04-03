@@ -2,6 +2,7 @@ package com.jhipster.demo.web.rest;
 
 import com.jhipster.demo.domain.Blog;
 import com.jhipster.demo.repository.BlogRepository;
+import com.jhipster.demo.security.SecurityUtils;
 import com.jhipster.demo.web.rest.errors.BadRequestAlertException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -13,6 +14,7 @@ import javax.validation.constraints.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
@@ -160,9 +162,16 @@ public class BlogResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the blog, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/blogs/{id}")
-    public ResponseEntity<Blog> getBlog(@PathVariable Long id) {
+    public ResponseEntity<?> getBlog(@PathVariable Long id) {
         log.debug("REST request to get Blog : {}", id);
         Optional<Blog> blog = blogRepository.findById(id);
+        if (
+            blog.isPresent() &&
+            blog.get().getUser() != null &&
+            !blog.get().getUser().getLogin().equals(SecurityUtils.getCurrentUserLogin().orElse(""))
+        ) {
+            return new ResponseEntity<>("error.http.403", HttpStatus.FORBIDDEN);
+        }
         return ResponseUtil.wrapOrNotFound(blog);
     }
 
