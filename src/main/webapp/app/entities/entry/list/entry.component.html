@@ -46,7 +46,7 @@
             <a [routerLink]="['/entry', entry.id, 'view']">{{ entry.id }}</a>
           </td>
           <td>{{ entry.title }}</td>
-          <td>{{ entry.content }}</td>
+          <td [innerHTML]="entry.content"></td>
           <td>{{ entry.date | formatMediumDatetime }}</td>
           <td>
             <div *ngIf="entry.blog">
