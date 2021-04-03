@@ -43,6 +43,9 @@
     "clientThemeVariant": "",
     "languages": ["en", "fr"],
     "entities": ["Blog", "Entry", "Tag"],
-    "lastLiquibaseTimestamp": 1617441449000
+    "lastLiquibaseTimestamp": 1617441449000,
+    "herokuAppName": "lit-ocean-94984",
+    "herokuDeployType": "git",
+    "herokuJavaVersion": "11"
   }
 }
